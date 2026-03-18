@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@plugin "tailwind-scrollbar";
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% + var(--container-width)));
+  }
+}
+
+/* * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+} */
