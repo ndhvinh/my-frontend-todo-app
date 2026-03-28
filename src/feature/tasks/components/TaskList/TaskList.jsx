@@ -11,10 +11,13 @@ import { useAddTask, useFetchTasksByListId } from "../../hooks";
 import { getTaskDetail } from "../../services/taskApi";
 import { useEditTask } from "../../hooks/useEditTask";
 import { useDeleteTask } from "../../hooks/useDeleteTask";
+import { AlertPopup } from "../../../../components/Popup/AlertPopup";
 
 function TaskList({ listId, listName }) {
   const { tasks, setTasks, error } = useFetchTasksByListId(listId);
   const [open, setOpen] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [deletingIndex, setDeletingIndex] = useState(-1);
   const { handleAddTask } = useAddTask(tasks, setTasks);
   const [taskData, setTaskData] = useState();
   const [editingIndex, setEditingIndex] = useState(-1);
@@ -25,6 +28,19 @@ function TaskList({ listId, listName }) {
 
   const { handleSaveEdit } = useEditTask(tasks, setTasks);
   const { handleDeleteTask } = useDeleteTask(tasks, setTasks);
+
+  function onClickDeleteTask(index) {
+    setDeletingIndex(index);
+    setOpenAlert(true);
+  }
+
+  async function onConfirmDeleteTask() {
+    if (deletingIndex !== -1) {
+      await handleDeleteTask(deletingIndex);
+    }
+    setOpenAlert(false);
+    setDeletingIndex(-1);
+  }
 
   const breakpointColumns = {
     default: 4,
@@ -41,6 +57,16 @@ function TaskList({ listId, listName }) {
         <SearchBar placeholder="Search tasks..." />
         {/* Add Task Button */}
         <CommButton btnText="Add Task" onClick={togglePopup} />
+        {openAlert && (
+          <AlertPopup
+            text="Bạn có chắc muốn xoá task này?"
+            onClose={() => {
+              setOpenAlert(false);
+              setDeletingIndex(-1);
+            }}
+            onConfirm={onConfirmDeleteTask}
+          />
+        )}
         {open && (
           <TaskPopup
             key={editingIndex}
@@ -77,7 +103,7 @@ function TaskList({ listId, listName }) {
                 icon="delete"
                 className="absolute bottom-2 right-2 z-10"
                 onClick={() => {
-                  handleDeleteTask(index);
+                  onClickDeleteTask(index);
                 }}
               />
               <h2 className="text-lg font-semibold truncate">{task.title}</h2>

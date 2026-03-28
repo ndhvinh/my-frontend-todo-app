@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { ScrollContainer } from "../ScrollContainer/ScrollContainer";
 
 export function TaskPopup({
   onClickDone,

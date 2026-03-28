@@ -1,6 +1,7 @@
 import { useState } from "react";
 import listCheckIcon from "../../../../assets/list-check-solid-full.svg";
 import { TreeView } from "../../../../components";
+import { AlertPopup } from "../../../../components/Popup/AlertPopup";
 import {
   useAddList,
   useDeleteList,
@@ -20,6 +21,8 @@ function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
   const { handleEditList } = useEditList(listName, setListName);
   const { handleDeleteList } = useDeleteList(listName, setListName);
   const [expandedItem, setExpandedItem] = useState(false);
+  const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+  const [deletingCategoryIndex, setDeletingCategoryIndex] = useState(-1);
   const toggleExpand = () => {
     setExpandedItem(!expandedItem);
   };
@@ -50,6 +53,19 @@ function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
     await handleDeleteList(index);
     onSelectCategory(null);
     onSelectedName(null);
+  }
+
+  function onClickDeleteCategory(index) {
+    setDeletingCategoryIndex(index);
+    setOpenDeleteAlert(true);
+  }
+
+  async function onConfirmDeleteCategory() {
+    if (deletingCategoryIndex !== -1) {
+      await handleDeleteCategory(deletingCategoryIndex);
+    }
+    setOpenDeleteAlert(false);
+    setDeletingCategoryIndex(-1);
   }
 
   return (
@@ -84,9 +100,20 @@ function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
           onEditItem={handleEditCategory}
           isEditting={editCategory}
           setEditting={setEditCategory}
-          onDeleteItem={handleDeleteCategory}
+          onDeleteItem={onClickDeleteCategory}
         />
       </div>
+
+      {openDeleteAlert && (
+        <AlertPopup
+          text="Bạn có chắc muốn xoá category này?"
+          onClose={() => {
+            setOpenDeleteAlert(false);
+            setDeletingCategoryIndex(-1);
+          }}
+          onConfirm={onConfirmDeleteCategory}
+        />
+      )}
 
       {/* Add Task Button */}
       <button
