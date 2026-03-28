@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import AngleRight from "../../assets/angle-right-solid-full.svg?react";
 import { ScrollContainer } from "../ScrollContainer/ScrollContainer";
+import { SlideOutMenu } from "../SlideOutMenu/SlideOutMenu";
 import { MarqueeText } from "../MarqueeText/MarqueeText";
-import { TreeSlideOutMenu } from "../TreeDotMenuButton/TreeDotMenuButton";
 
 export function TreeView({
   title,
@@ -126,7 +126,7 @@ export function TreeView({
                 >
                   ⋯
                 </button>
-                <TreeSlideOutMenu
+                <SlideOutMenu
                   isOpen={openMenuId === item._id}
                   onEdit={() => {
                     handleClickEdit();
