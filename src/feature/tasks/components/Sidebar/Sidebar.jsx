@@ -11,6 +11,7 @@ import {
 } from "../../hooks";
 
 function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
+  const isOverviewSelected = selectedListId === null;
   const { listName, setListName, loadListName } = useFetchListName();
   const { handleAddList } = useAddList(
     listName,
@@ -78,9 +79,14 @@ function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
 
       {/* Task Organizer Section */}
       <div className="flex flex-col flex-1 min-h-0 mb-6">
-        <h3 className="text-sm font-bold text-gray-700 mb-3">Task organizer</h3>
         <div
-          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-[#f0825c]/20 ${isDisabled}`}
+          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-[#f0825c]/20 ${
+            isOverviewSelected ? "font-bold bg-[#f0825c]/20" : ""
+          } ${isDisabled}`}
+          onClick={() => {
+            onSelectCategory(null);
+            onSelectedName("OverView");
+          }}
         >
           <span>OverView</span>
         </div>

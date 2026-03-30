@@ -6,7 +6,7 @@ import "./MainPage.css";
 
 function MainPage() {
   const [selectedListId, setSelectedListId] = useState(null);
-  const [selectedListName, setSelectedListName] = useState("");
+  const [selectedListName, setSelectedListName] = useState("OverView");
 
   return (
     <div className="h-screen flex flex-col">
