@@ -7,18 +7,56 @@ import {
   SearchBar,
   TaskPopup,
 } from "../../../../components";
-import { useAddTask, useFetchTasksByListId } from "../../hooks";
-import { getTaskDetail } from "../../services/taskApi";
+import {
+  useAddTask,
+  useFetchListName,
+  useFetchTasks,
+  useFetchTasksByListId,
+} from "../../hooks";
+import { TASK_TYPE } from "../../services/taskApi";
 import { useEditTask } from "../../hooks/useEditTask";
 import { useDeleteTask } from "../../hooks/useDeleteTask";
 import { AlertPopup } from "../../../../components/Popup/AlertPopup";
 
+function parseChecklistFromText(value = "") {
+  if (!value.trim()) return [];
+
+  return value
+    .split("\n")
+    .filter((line) => line.trim() !== "")
+    .map((line) => {
+      const checked = /^\s*-\s*\[x\]/i.test(line);
+      const text = line.replace(/^\s*-\s*\[[ xX]\]\s*/, "").trim();
+      return { checked, text };
+    });
+}
+
+function normalizeChecklist(task) {
+  if (Array.isArray(task?.checklist)) return task.checklist;
+  if (typeof task?.text === "string") return parseChecklistFromText(task.text);
+  return [];
+}
+
 function TaskList({ listId, listName }) {
-  const { tasks, setTasks, error } = useFetchTasksByListId(listId);
+  const isOverview = !listId;
+  const { listName: listOptions } = useFetchListName();
+  const {
+    tasks: allTasks,
+    setTasks: setAllTasks,
+    error: allTasksError,
+  } = useFetchTasks();
+  const {
+    tasks: listTasks,
+    setTasks: setListTasks,
+    error: listTasksError,
+  } = useFetchTasksByListId(listId);
+
+  const tasks = isOverview ? allTasks : listTasks;
+  const setTasks = isOverview ? setAllTasks : setListTasks;
+  const error = isOverview ? allTasksError : listTasksError;
   const [open, setOpen] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [deletingIndex, setDeletingIndex] = useState(-1);
-  const { handleAddTask } = useAddTask(tasks, setTasks);
   const [taskData, setTaskData] = useState();
   const [editingIndex, setEditingIndex] = useState(-1);
 
@@ -26,6 +64,7 @@ function TaskList({ listId, listName }) {
     setOpen(!open);
   }
 
+  const { handleAddTask } = useAddTask(tasks, setTasks);
   const { handleSaveEdit } = useEditTask(tasks, setTasks);
   const { handleDeleteTask } = useDeleteTask(tasks, setTasks);
 
@@ -73,7 +112,10 @@ function TaskList({ listId, listName }) {
             onClickDone={togglePopup}
             onAddTask={handleAddTask}
             onEditTask={handleSaveEdit}
+            onDeleteTask={handleDeleteTask}
             listId={listId}
+            isOverviewMode={isOverview}
+            listOptions={listOptions}
             index={editingIndex}
             taskData={taskData}
             setTaskData={setTaskData}
@@ -106,10 +148,44 @@ function TaskList({ listId, listName }) {
                   onClickDeleteTask(index);
                 }}
               />
+              {isOverview && task.listName && (
+                <p className="text-xs italic text-gray-500 mb-1">
+                  {task.listName}
+                </p>
+              )}
               <h2 className="text-lg font-semibold truncate">{task.title}</h2>
-              <p className="whitespace-pre-wrap break-words overflow-hidden">
-                {task.text}
-              </p>
+              {task.taskType === TASK_TYPE.CHECKLIST ? (
+                <div className="mt-2 flex flex-col gap-2">
+                  {normalizeChecklist(task).map((item, checklistIndex) => (
+                    <div
+                      key={`${task._id || index}-check-${checklistIndex}`}
+                      className={`flex items-center gap-2 rounded-md border px-2 py-1.5 transition-colors ${
+                        item.checked
+                          ? "border-[#f4b8a4] bg-[#fff4ef]"
+                          : "border-gray-200 bg-gray-50"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={Boolean(item.checked)}
+                        className="accent-[#e06a43]"
+                        readOnly
+                      />
+                      <span
+                        className={`break-words ${
+                          item.checked ? "line-through" : "text-gray-900"
+                        }`}
+                      >
+                        {item.text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="whitespace-pre-wrap break-words overflow-hidden">
+                  {task.text}
+                </p>
+              )}
               {/* Gradient fade to indicate more content */}
               <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white to-transparent pointer-events-none rounded-b-lg" />
             </div>

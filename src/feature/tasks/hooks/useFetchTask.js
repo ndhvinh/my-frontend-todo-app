@@ -19,7 +19,7 @@ export function useFetchTasks() {
     loadTasks();
   }, []);
 
-  return { tasks, error };
+  return { tasks, setTasks, error };
 }
 
 export function useFetchTasksByListId(id) {
