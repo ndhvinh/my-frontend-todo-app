@@ -159,11 +159,7 @@ function TaskList({ listId, listName }) {
                   {normalizeChecklist(task).map((item, checklistIndex) => (
                     <div
                       key={`${task._id || index}-check-${checklistIndex}`}
-                      className={`flex items-center gap-2 rounded-md border px-2 py-1.5 transition-colors ${
-                        item.checked
-                          ? "border-[#f4b8a4] bg-[#fff4ef]"
-                          : "border-gray-200 bg-gray-50"
-                      }`}
+                      className={`flex items-center gap-2 rounded-md border px-2 py-1.5 transition-colors border-gray-200 bg-gray-50`}
                     >
                       <input
                         type="checkbox"

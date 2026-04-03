@@ -215,11 +215,7 @@ export function TaskPopup({
               {checklistItems.map((item, itemIndex) => (
                 <div
                   key={itemIndex}
-                  className={`flex items-center gap-2 rounded-md border px-2 py-1.5 transition-colors ${
-                    item.checked
-                      ? "border-[#f4b8a4] bg-[#fff4ef]"
-                      : "border-gray-200 bg-gray-50"
-                  }`}
+                  className={`flex items-center gap-2 rounded-md border px-2 py-1.5 transition-colors border-gray-200 bg-gray-50`}
                 >
                   <input
                     type="checkbox"
@@ -248,7 +244,7 @@ export function TaskPopup({
                     placeholder="Checklist item"
                   />
                   <button
-                    className="px-2 py-1 text-red-600 hover:bg-red-50 rounded cursor-pointer"
+                    className="px-2 py-1 text-[#f0825c] hover:bg-red-50 rounded cursor-pointer"
                     onClick={() => handleRemoveChecklistItem(itemIndex)}
                   >
                     ×
