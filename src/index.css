@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @plugin "tailwind-scrollbar";
 
+@theme {
+  --color-brand: #f0825c;
+  --color-brand-hover: #d96b3f;
+  --color-brand-dark: #e06a45;
+  --color-brand-soft: #fff4ed;
+  --color-brand-muted: #fde8dc;
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);

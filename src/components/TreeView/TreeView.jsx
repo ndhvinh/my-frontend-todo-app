@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import AngleRight from "../../assets/angle-right-solid-full.svg?react";
 import { ScrollContainer } from "../ScrollContainer/ScrollContainer";
 import { SlideOutMenu } from "../SlideOutMenu/SlideOutMenu";
 import { MarqueeText } from "../MarqueeText/MarqueeText";
@@ -75,11 +74,13 @@ export function TreeView({
   return (
     <div className="flex flex-col flex-1 min-h-0">
       <div
-        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-[#f0825c]/20 ${isDisabled}`}
+        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-brand/20 ${isDisabled}`}
         onClick={toggleExpand}
       >
-        <AngleRight
-          className={`w-5 h-5 text-gray-500 transition-transform duration-500 ease-in-out ${expandedItem ? "rotate-90" : ""}`}
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/709/709612.png"
+          alt="Toggle"
+          className={`w-4 h-4 opacity-70 transition-transform duration-500 ease-in-out ${expandedItem ? "rotate-90" : ""}`}
         />
         <span>{title}</span>
       </div>
@@ -87,7 +88,7 @@ export function TreeView({
       <ScrollContainer ref={scrollContainerRef} visible={expandedItem}>
         {isAdding && (
           <span
-            className={`flex items-center gap-2.5 pl-11 pr-3 py-2 rounded-lg text-[15px] transition-colors !bg-[#f0825c]/50 outline-none`}
+            className={`flex items-center gap-2.5 pl-11 pr-3 py-2 rounded-lg text-[15px] transition-colors !bg-brand/50 outline-none`}
           >
             <input
               className="outline-none flex-1 min-w-0"
@@ -111,7 +112,7 @@ export function TreeView({
           subTitle.map((item, index) => (
             <div
               key={item._id || index}
-              className={`group/item relative flex items-center gap-1.5 pl-3 pr-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-[#f0825c]/20 ${editingIndex !== index && isDisabled} ${selectedId === item._id ? "bg-[#f0825c]/20 font-semibold" : ""}`}
+              className={`group/item relative flex items-center gap-1.5 pl-3 pr-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-brand/20 ${editingIndex !== index && isDisabled} ${selectedId === item._id ? "bg-brand/20 font-semibold" : ""}`}
               onClick={() => {
                 (onSelectItem?.(item._id), onSelectedName?.(item.name));
               }}
@@ -139,9 +140,11 @@ export function TreeView({
                   }}
                 />
               </div>
-              <span className="w-5 h-5 flex items-center justify-center text-base">
-                📋
-              </span>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png"
+                alt="Category"
+                className="w-4 h-4 opacity-80"
+              />
               {editingIndex === index && isEditting ? (
                 <input
                   key={item._id}

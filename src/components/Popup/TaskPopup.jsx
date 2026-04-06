@@ -244,7 +244,7 @@ export function TaskPopup({
                     placeholder="Checklist item"
                   />
                   <button
-                    className="px-2 py-1 text-[#f0825c] hover:bg-red-50 rounded cursor-pointer"
+                    className="px-2 py-1 text-brand hover:bg-red-50 rounded cursor-pointer"
                     onClick={() => handleRemoveChecklistItem(itemIndex)}
                   >
                     ×
@@ -262,8 +262,8 @@ export function TaskPopup({
         )}
         <div className="relative flex gap-1 justify-end mt-auto">
           <button
-            className="flex-1 px-4 py-2 bg-[#f0825c]
-                    text-white rounded hover:bg-[#d96b3f] justify-self-end"
+            className="flex-1 px-4 py-2 bg-brand
+                    text-white rounded hover:bg-brand-hover justify-self-end"
             onClick={handleClickDone}
           >
             Done

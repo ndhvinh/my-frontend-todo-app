@@ -15,13 +15,13 @@ export function AlertPopup({
         <p className="text-gray-800 mb-4">{text}</p>
         <div className="flex gap-2 justify-end">
           <button
-            className="px-4 py-2 rounded-lg bg-[#f0825c] text-white hover:bg-[#e06a45]"
+            className="px-4 py-2 rounded-lg bg-brand text-white hover:bg-brand-dark"
             onClick={onClose}
           >
             No
           </button>
           <button
-            className="px-4 py-2 rounded-lg bg-white text-[#f0825c] border border-[#f0825c] hover:bg-[#fff4ef]"
+            className="px-4 py-2 rounded-lg bg-white text-brand border border-brand hover:bg-brand-soft"
             onClick={onConfirm}
           >
             Yes
