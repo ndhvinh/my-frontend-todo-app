@@ -17,7 +17,7 @@ export const ScrollContainer = forwardRef(function ScrollContainer(
   return (
     <div
       ref={scrollRef}
-      className={`overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-[#f0825c]/50 scrollbar-track-transparent transition-all duration-500 ease-in-out ${visible ? "flex-1 min-h-0 opacity-100" : "max-h-0 opacity-0 overflow-hidden"} ${className}`}
+      className={`overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-brand/50 scrollbar-track-transparent transition-all duration-500 ease-in-out ${visible ? "flex-1 min-h-0 opacity-100" : "max-h-0 opacity-0 overflow-hidden"} ${className}`}
     >
       {children}
     </div>

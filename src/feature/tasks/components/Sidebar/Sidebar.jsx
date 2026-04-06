@@ -1,5 +1,4 @@
 import { useState } from "react";
-import listCheckIcon from "../../../../assets/list-check-solid-full.svg";
 import { TreeView } from "../../../../components";
 import { AlertPopup } from "../../../../components/Popup/AlertPopup";
 import {
@@ -70,18 +69,12 @@ function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
   }
 
   return (
-    <aside className="w-70 h-full bg-[#fde8dc] p-5 flex flex-col">
-      {/* Header */}
-      <div className="flex items-center gap-3 text-2xl font-bold mb-8">
-        <img src={listCheckIcon} alt="My Tasks" className="w-8 h-8" />
-        <span>My Tasks</span>
-      </div>
-
+    <aside className="w-70 h-full bg-brand-muted p-5 flex flex-col">
       {/* Task Organizer Section */}
       <div className="flex flex-col flex-1 min-h-0 mb-6">
         <div
-          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-[#f0825c]/20 ${
-            isOverviewSelected ? "font-bold bg-[#f0825c]/20" : ""
+          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-brand/20 ${
+            isOverviewSelected ? "font-bold bg-brand/20" : ""
           } ${isDisabled}`}
           onClick={() => {
             onSelectCategory(null);
@@ -123,7 +116,7 @@ function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
 
       {/* Add Task Button */}
       <button
-        className={`mt-auto py-3.5 px-6 bg-[#f0825c] text-white border-none rounded-3xl text-base font-medium cursor-pointer transition-all opacity-80 hover:opacity-100 hover:bg-[#e06a45] ${isDisabled}`}
+        className={`mt-auto py-3.5 px-6 bg-brand text-white border-none rounded-3xl text-base font-medium cursor-pointer transition-all opacity-80 hover:opacity-100 hover:bg-brand-dark ${isDisabled}`}
         onClick={handleAddCategory}
       >
         Add Category

@@ -3,7 +3,7 @@ export function SearchBar({ placeholder }) {
     <div className="relative max-w-xs flex-1">
       <input
         type="text"
-        className="w-full p-2 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#f0825c] text-sm"
+        className="w-full p-2 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-brand text-sm"
         placeholder={placeholder}
       />
       <svg
