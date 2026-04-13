@@ -1,60 +1,42 @@
-const API_URL = "http://localhost:5001/list";
+import { request } from "./apiClient";
+
+const API_URL = "/list";
 
 export async function fetchList() {
-  const response = await fetch(API_URL);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  const data = await response.json();
-
-  return data;
+  return request(API_URL, {
+    fallbackMessage: "Không thể tải danh sách list",
+  });
 }
 
 export async function fetchListName() {
-  const response = await fetch(`${API_URL}/name`);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  const data = await response.json();
-
-  return data;
+  return request(`${API_URL}/name`, {
+    fallbackMessage: "Không thể tải tên list",
+  });
 }
 
 export async function createCategory(name) {
-  const response = await fetch(API_URL, {
+  return request(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+    body: {
+      name,
     },
-    body: JSON.stringify({
-      name: name,
-    }),
+    fallbackMessage: "Không thể thêm list",
   });
-  if (!response.ok) throw new Error("Không thể thêm list");
-  return response.json();
 }
 
 export async function updateCategoryName({ id, name }) {
-  const response = await fetch(`${API_URL}/${id}`, {
+  return request(`${API_URL}/${id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
+    body: {
+      name,
     },
-    body: JSON.stringify({
-      name: name,
-    }),
+    fallbackMessage: "Không thể cập nhật list",
   });
-  if (!response.ok) throw new Error("Không thể cập nhật list");
-  return response.json();
 }
 
 export async function deleteCategoryById(id) {
-  const response = await fetch(`${API_URL}/${id}`, {
+  return request(`${API_URL}/${id}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    fallbackMessage: "Không thể xoá list",
   });
-  if (!response.ok) throw new Error("Không thể xoá list");
-  return response.json();
 }
