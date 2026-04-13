@@ -61,6 +61,7 @@ function TaskList({ listId, listName }) {
   const [editingIndex, setEditingIndex] = useState(-1);
   const [isMobileTopHidden, setIsMobileTopHidden] = useState(false);
   const lastScrollTopRef = useRef(0);
+  const scrollDeltaRef = useRef(0);
 
   function togglePopup() {
     setOpen(!open);
@@ -92,18 +93,44 @@ function TaskList({ listId, listName }) {
   };
 
   function handleTaskListScroll(event) {
-    const currentTop = event.currentTarget.scrollTop;
+    const target = event.currentTarget;
+    const maxTop = Math.max(0, target.scrollHeight - target.clientHeight);
+    const currentTop = Math.min(Math.max(target.scrollTop, 0), maxTop);
 
-    if (currentTop < 8) {
+    const TOP_LOCK = 16;
+    const BOTTOM_LOCK = 16;
+    const HIDE_THRESHOLD = 28;
+    const SHOW_THRESHOLD = 18;
+
+    if (currentTop <= TOP_LOCK) {
       setIsMobileTopHidden(false);
       lastScrollTopRef.current = currentTop;
+      scrollDeltaRef.current = 0;
       return;
     }
 
-    if (currentTop > lastScrollTopRef.current + 2) {
+    if (currentTop >= maxTop - BOTTOM_LOCK) {
+      lastScrollTopRef.current = currentTop;
+      scrollDeltaRef.current = 0;
+      return;
+    }
+
+    const delta = currentTop - lastScrollTopRef.current;
+
+    if (Math.abs(delta) < 1) return;
+
+    if (Math.sign(scrollDeltaRef.current) !== Math.sign(delta)) {
+      scrollDeltaRef.current = 0;
+    }
+
+    scrollDeltaRef.current += delta;
+
+    if (scrollDeltaRef.current > HIDE_THRESHOLD) {
       setIsMobileTopHidden(true);
-    } else if (currentTop < lastScrollTopRef.current - 2) {
+      scrollDeltaRef.current = 0;
+    } else if (scrollDeltaRef.current < -SHOW_THRESHOLD) {
       setIsMobileTopHidden(false);
+      scrollDeltaRef.current = 0;
     }
 
     lastScrollTopRef.current = currentTop;
