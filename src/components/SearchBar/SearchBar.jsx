@@ -1,6 +1,6 @@
-export function SearchBar({ placeholder }) {
+export function SearchBar({ placeholder, className = "" }) {
   return (
-    <div className="relative w-full sm:max-w-xs flex-1">
+    <div className={`relative w-full sm:max-w-xs flex-1 ${className}`}>
       <input
         type="text"
         className="w-full p-2 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-brand text-sm"

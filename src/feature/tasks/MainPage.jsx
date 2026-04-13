@@ -14,7 +14,7 @@ function MainPage({ onLogout }) {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="h-[100dvh] flex flex-col overflow-hidden">
       <Header
         className="shrink-0"
         onLogout={onLogout}

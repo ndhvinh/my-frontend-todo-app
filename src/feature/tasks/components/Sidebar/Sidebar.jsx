@@ -87,10 +87,10 @@ function Sidebar({
 
   return (
     <aside
-      className={`w-[82%] max-w-[320px] md:max-w-none md:w-70 h-full bg-brand-muted p-4 md:p-5 flex flex-col ${className}`}
+      className={`w-[82%] max-w-[320px] md:max-w-none md:w-70 h-full bg-brand-muted px-4 pt-4 md:px-5 md:pt-5 flex flex-col ${className}`}
     >
       {/* Task Organizer Section */}
-      <div className="flex flex-col flex-1 min-h-0 mb-6">
+      <div className="flex flex-col flex-1 min-h-0 mb-3 md:mb-6">
         <div
           className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-brand/20 ${
             isOverviewSelected ? "font-bold bg-brand/20" : ""
@@ -131,12 +131,14 @@ function Sidebar({
       )}
 
       {/* Add Task Button */}
-      <button
-        className={`mt-auto py-3.5 px-6 bg-brand text-white border-none rounded-3xl text-base font-medium cursor-pointer transition-all opacity-80 hover:opacity-100 hover:bg-brand-dark ${isDisabled}`}
-        onClick={handleAddCategory}
-      >
-        Add Category
-      </button>
+      <div className="shrink-0 pt-2 md:pt-0 pb-[calc(env(safe-area-inset-bottom)+12px)] md:pb-5">
+        <button
+          className={`w-full py-3.5 px-6 bg-brand text-white border-none rounded-3xl text-base font-medium cursor-pointer transition-all opacity-80 hover:opacity-100 hover:bg-brand-dark ${isDisabled}`}
+          onClick={handleAddCategory}
+        >
+          Add Category
+        </button>
+      </div>
     </aside>
   );
 }
