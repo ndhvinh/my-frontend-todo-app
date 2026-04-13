@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:5001/tasks";
+import { request } from "./apiClient";
+
+const API_URL = "/tasks";
 
 export const TASK_TYPE = Object.freeze({
   TEXT: "text",
@@ -11,24 +13,16 @@ function normalizeTaskType(taskType) {
 }
 
 export async function fetchTasks() {
-  const response = await fetch(API_URL);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  const data = await response.json();
-
-  return data;
+  return request(API_URL, {
+    fallbackMessage: "Không thể tải danh sách task",
+  });
 }
 
 // Lấy danh sách task theo listId
 export async function fetchTasksByListId(id) {
-  const response = await fetch(`${API_URL}/list/${id}`);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  const data = await response.json();
-
-  return data;
+  return request(`${API_URL}/list/${id}`, {
+    fallbackMessage: "Không thể tải danh sách task theo list",
+  });
 }
 
 // Lưu task
@@ -47,48 +41,33 @@ export async function createTask(listId, title, text, checklist, taskType) {
     body.checklist = checklist;
   }
 
-  const response = await fetch(API_URL, {
+  return request(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
+    body,
+    fallbackMessage: "Không thể thêm task",
   });
-  if (!response.ok) throw new Error("Không thể thêm task");
-  return response.json();
 }
 
 // Xem chi tiết task
 export async function getTaskDetail(id) {
-  const response = await fetch(`${API_URL}/${id}`);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  const data = await response.json();
-
-  return data;
+  return request(`${API_URL}/${id}`, {
+    fallbackMessage: "Không thể lấy chi tiết task",
+  });
 }
 
 // Chỉnh sửa task
 export async function updateTask(body) {
-  const response = await fetch(`${API_URL}/${body._id}`, {
+  return request(`${API_URL}/${body._id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
+    body,
+    fallbackMessage: "Không thể cập nhật task",
   });
-  if (!response.ok) throw new Error("Không thể cập nhật task");
-  return response.json();
 }
 
 // Xoá task
 export async function deleteTaskById(id) {
-  const response = await fetch(`${API_URL}/${id}`, {
+  return request(`${API_URL}/${id}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    fallbackMessage: "Không thể xoá task",
   });
-  return response.json();
 }
