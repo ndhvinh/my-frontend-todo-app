@@ -65,6 +65,14 @@ export function TaskPopup({
   );
   const isEditMode = index !== -1;
   const showListSelector = !isEditMode && isOverviewMode;
+  const hasTitle = title.trim() !== "";
+  const hasChecklistContent = checklistItems.some(
+    (item) => typeof item?.text === "string" && item.text.trim() !== "",
+  );
+  const isDoneDisabled =
+    !hasTitle ||
+    (taskType === TASK_TYPE.CHECKLIST && !hasChecklistContent) ||
+    (!isEditMode && showListSelector && !selectedCreateListId);
 
   useEffect(() => {
     const nextTaskType = taskData?.taskType || TASK_TYPE.TEXT;
@@ -153,7 +161,7 @@ export function TaskPopup({
   }
 
   async function handleClickDone() {
-    if (title.trim() === "") return;
+    if (isDoneDisabled) return;
 
     const text = taskType === TASK_TYPE.TEXT ? content : "";
     const checklist =
@@ -262,9 +270,13 @@ export function TaskPopup({
         )}
         <div className="relative flex gap-1 justify-end mt-auto">
           <button
-            className="flex-1 px-4 py-2 bg-brand
-                    text-white rounded hover:bg-brand-hover justify-self-end"
+            className={`flex-1 px-4 py-2 text-white rounded justify-self-end transition-colors ${
+              isDoneDisabled
+                ? "bg-brand opacity-50 cursor-not-allowed"
+                : "bg-brand hover:bg-brand-hover cursor-pointer"
+            }`}
             onClick={handleClickDone}
+            disabled={isDoneDisabled}
           >
             Done
           </button>
