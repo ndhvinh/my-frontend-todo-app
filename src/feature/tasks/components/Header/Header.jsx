@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { me } from "../../services/authApi";
 
-function Header({ onLogout }) {
+function Header({
+  onLogout,
+  onToggleSidebar,
+  isSidebarOpen = false,
+  className = "",
+}) {
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const [username, setUsername] = useState("Anonymous");
   const userMenuRef = useRef(null);
@@ -49,27 +54,39 @@ function Header({ onLogout }) {
   }, [openUserMenu]);
 
   return (
-    <header className="header-container flex items-center justify-between p-4 shadow-md bg-brand-soft">
-      <div className="flex items-center gap-3 text-2xl font-bold">
+    <header
+      className={`header-container flex items-center justify-between px-3 py-3 md:px-4 shadow-md bg-brand-soft ${className}`}
+    >
+      <div className="flex items-center gap-2 md:gap-3 text-xl md:text-2xl font-bold min-w-0">
+        <button
+          type="button"
+          className="md:hidden inline-flex items-center justify-center w-8 h-8 rounded-md hover:bg-white/70"
+          onClick={onToggleSidebar}
+          aria-label={isSidebarOpen ? "Đóng menu" : "Mở menu"}
+        >
+          ☰
+        </button>
         <img
           src="https://cdn-icons-png.flaticon.com/512/5465/5465709.png"
           alt="My Tasks"
-          className="w-8 h-8"
+          className="w-7 h-7 md:w-8 md:h-8 shrink-0"
         />
-        <span>My Tasks</span>
+        <span className="truncate">My Tasks</span>
       </div>
       <div className="relative" ref={userMenuRef}>
         <button
           type="button"
-          className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-white/60 transition"
+          className="flex items-center gap-2 md:gap-3 rounded-lg px-2 py-1 hover:bg-white/60 transition"
           onClick={() => setOpenUserMenu((prev) => !prev)}
         >
           <img
             src="https://cdn-icons-png.flaticon.com/512/747/747376.png"
             alt="User avatar"
-            className="w-9 h-9 rounded-full border border-gray-300"
+            className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-gray-300"
           />
-          <span className="text-sm font-medium text-gray-700">{username}</span>
+          <span className="hidden sm:block text-sm font-medium text-gray-700 max-w-[120px] truncate">
+            {username}
+          </span>
         </button>
 
         {openUserMenu && (

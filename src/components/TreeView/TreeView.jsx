@@ -119,7 +119,11 @@ export function TreeView({
             >
               <div className="relative flex items-center">
                 <button
-                  className={`w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/60 transition-colors cursor-pointer text-black ${openMenuId === item._id ? "opacity-100" : "opacity-0 group-hover/item:opacity-100"}`}
+                  className={`w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/60 transition-colors cursor-pointer text-black ${
+                    openMenuId === item._id
+                      ? "opacity-100"
+                      : "opacity-100 md:opacity-0 md:group-hover/item:opacity-100"
+                  }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     setOpenMenuId(openMenuId === item._id ? null : item._id);
