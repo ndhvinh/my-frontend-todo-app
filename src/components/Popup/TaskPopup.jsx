@@ -185,12 +185,21 @@ export function TaskPopup({
       onClick={handleClosePopup}
     >
       <div
-        className="flex flex-col max-h-80% h-[60%] w-[40%] bg-white p-6 rounded-lg shadow-lg"
+        className="relative flex flex-col w-[95vw] sm:w-[88vw] md:w-[72vw] lg:w-[56vw] xl:w-[40vw] h-[86vh] md:h-[72vh] max-h-[90vh] bg-white p-4 md:p-6 rounded-lg shadow-lg"
         onClick={(e) => {
           e.stopPropagation();
           setOpenMoreMenu(false);
         }}
       >
+        <button
+          type="button"
+          className="md:hidden absolute top-2 right-2 w-8 h-8 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center justify-center"
+          onClick={handleClosePopup}
+          aria-label="Đóng popup"
+        >
+          ✕
+        </button>
+
         {showListSelector && (
           <select
             className="mb-4 w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm outline-none"
@@ -205,7 +214,7 @@ export function TaskPopup({
           </select>
         )}
         <input
-          className="text-xl font-bold mb-4 outline-none"
+          className="text-lg md:text-xl font-bold mb-4 outline-none"
           value={title}
           onChange={handleTitleChange}
           placeholder="Add New Task"
@@ -268,7 +277,7 @@ export function TaskPopup({
             </div>
           </div>
         )}
-        <div className="relative flex gap-1 justify-end mt-auto">
+        <div className="relative flex gap-2 justify-end mt-auto">
           <button
             className={`flex-1 px-4 py-2 text-white rounded justify-self-end transition-colors ${
               isDoneDisabled
@@ -281,7 +290,7 @@ export function TaskPopup({
             Done
           </button>
           <button
-            className="w-[5%] font-bold bg-gray-500 text-white rounded hover:bg-gray-600 justify-self-end cursor-pointer"
+            className="w-10 md:w-9 shrink-0 font-bold bg-gray-500 text-white rounded hover:bg-gray-600 justify-self-end cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setOpenMoreMenu(!openMoreMenu);

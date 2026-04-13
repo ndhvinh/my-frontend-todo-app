@@ -9,7 +9,13 @@ import {
   useFetchListName,
 } from "../../hooks";
 
-function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
+function Sidebar({
+  onSelectCategory,
+  selectedListId,
+  onSelectedName,
+  onRequestClose,
+  className = "",
+}) {
   const isOverviewSelected = selectedListId === null;
   const { listName, setListName, loadListName } = useFetchListName();
   const { handleAddList } = useAddList(
@@ -68,18 +74,28 @@ function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
     setDeletingCategoryIndex(-1);
   }
 
+  function handleSelectOverview() {
+    onSelectCategory(null);
+    onSelectedName("OverView");
+    onRequestClose?.();
+  }
+
+  function handleSelectCategoryAndClose(categoryId) {
+    onSelectCategory(categoryId);
+    onRequestClose?.();
+  }
+
   return (
-    <aside className="w-70 h-full bg-brand-muted p-5 flex flex-col">
+    <aside
+      className={`w-[82%] max-w-[320px] md:max-w-none md:w-70 h-full bg-brand-muted p-4 md:p-5 flex flex-col ${className}`}
+    >
       {/* Task Organizer Section */}
       <div className="flex flex-col flex-1 min-h-0 mb-6">
         <div
           className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-[15px] transition-colors hover:bg-brand/20 ${
             isOverviewSelected ? "font-bold bg-brand/20" : ""
           } ${isDisabled}`}
-          onClick={() => {
-            onSelectCategory(null);
-            onSelectedName("OverView");
-          }}
+          onClick={handleSelectOverview}
         >
           <span>OverView</span>
         </div>
@@ -93,7 +109,7 @@ function Sidebar({ onSelectCategory, selectedListId, onSelectedName }) {
             setAddCategory(false);
           }}
           onSubmit={handleCreateCategory}
-          onSelectItem={onSelectCategory}
+          onSelectItem={handleSelectCategoryAndClose}
           selectedId={selectedListId}
           onSelectedName={onSelectedName}
           onEditItem={handleEditCategory}

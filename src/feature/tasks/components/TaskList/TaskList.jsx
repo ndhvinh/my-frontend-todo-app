@@ -83,19 +83,26 @@ function TaskList({ listId, listName }) {
 
   const breakpointColumns = {
     default: 4,
+    1536: 4,
     1280: 3,
     1024: 2,
     640: 1,
   };
 
   return (
-    <div className="bg-transparent flex flex-col flex-1 min-h-0 p-6">
-      <h1 className="text-2xl h-8 font-bold mb-6">{listName || "Task List"}</h1>
-      <div className="flex flex-row h-8 gap-4 mb-6 justify-between">
+    <div className="bg-transparent flex flex-col flex-1 min-h-0 p-3 sm:p-4 md:p-6 overflow-hidden">
+      <h1 className="text-xl sm:text-2xl min-h-8 font-bold mb-4 md:mb-6 truncate">
+        {listName || "Task List"}
+      </h1>
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 md:mb-6 justify-between">
         {/* Search Bar */}
         <SearchBar placeholder="Search tasks..." />
         {/* Add Task Button */}
-        <CommButton btnText="Add Task" onClick={togglePopup} />
+        <CommButton
+          btnText="Add Task"
+          onClick={togglePopup}
+          className="w-full sm:w-auto"
+        />
         {openAlert && (
           <AlertPopup
             text="Bạn có chắc muốn xoá task này?"
@@ -134,7 +141,7 @@ function TaskList({ listId, listName }) {
           {tasks.map((task, index) => (
             <div
               key={task._id || index}
-              className="group relative p-4 max-h-[45vh] overflow-hidden border rounded-lg border-gray-300 shadow-sm hover:shadow-md transition-shadow bg-white"
+              className="group relative p-3 sm:p-4 max-h-[55vh] sm:max-h-[45vh] overflow-hidden border rounded-lg border-gray-300 shadow-sm hover:shadow-md transition-shadow bg-white"
               onClick={() => {
                 setEditingIndex(index);
                 setTaskData(task);
