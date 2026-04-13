@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Masonry from "react-masonry-css";
 import {
   CommButton,
@@ -59,6 +59,8 @@ function TaskList({ listId, listName }) {
   const [deletingIndex, setDeletingIndex] = useState(-1);
   const [taskData, setTaskData] = useState();
   const [editingIndex, setEditingIndex] = useState(-1);
+  const [isMobileTopHidden, setIsMobileTopHidden] = useState(false);
+  const lastScrollTopRef = useRef(0);
 
   function togglePopup() {
     setOpen(!open);
@@ -89,49 +91,58 @@ function TaskList({ listId, listName }) {
     640: 1,
   };
 
+  function handleTaskListScroll(event) {
+    const currentTop = event.currentTarget.scrollTop;
+
+    if (currentTop < 8) {
+      setIsMobileTopHidden(false);
+      lastScrollTopRef.current = currentTop;
+      return;
+    }
+
+    if (currentTop > lastScrollTopRef.current + 2) {
+      setIsMobileTopHidden(true);
+    } else if (currentTop < lastScrollTopRef.current - 2) {
+      setIsMobileTopHidden(false);
+    }
+
+    lastScrollTopRef.current = currentTop;
+  }
+
   return (
     <div className="bg-transparent flex flex-col flex-1 min-h-0 p-3 sm:p-4 md:p-6 overflow-hidden">
-      <h1 className="text-xl sm:text-2xl min-h-8 font-bold mb-4 md:mb-6 truncate">
-        {listName || "Task List"}
-      </h1>
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 md:mb-6 justify-between">
-        {/* Search Bar */}
+      <div
+        className={`sm:hidden overflow-hidden transition-all duration-200 ${
+          isMobileTopHidden
+            ? "max-h-0 opacity-0 mb-0"
+            : "max-h-20 opacity-100 mb-3"
+        }`}
+      >
+        <div className="flex items-center gap-2">
+          <h1 className="text-xl min-h-8 font-bold truncate flex-1">
+            {listName || "Task List"}
+          </h1>
+          <SearchBar placeholder="Search tasks..." className="max-w-[58%]" />
+        </div>
+      </div>
+
+      <div className="hidden sm:flex flex-row gap-3 sm:gap-4 mb-4 md:mb-6 justify-between items-center">
+        <h1 className="text-2xl min-h-8 font-bold truncate flex-1">
+          {listName || "Task List"}
+        </h1>
         <SearchBar placeholder="Search tasks..." />
-        {/* Add Task Button */}
         <CommButton
           btnText="Add Task"
           onClick={togglePopup}
-          className="w-full sm:w-auto"
+          className="w-auto"
         />
-        {openAlert && (
-          <AlertPopup
-            text="Bạn có chắc muốn xoá task này?"
-            onClose={() => {
-              setOpenAlert(false);
-              setDeletingIndex(-1);
-            }}
-            onConfirm={onConfirmDeleteTask}
-          />
-        )}
-        {open && (
-          <TaskPopup
-            key={editingIndex}
-            onClickDone={togglePopup}
-            onAddTask={handleAddTask}
-            onEditTask={handleSaveEdit}
-            onDeleteTask={handleDeleteTask}
-            listId={listId}
-            isOverviewMode={isOverview}
-            listOptions={listOptions}
-            index={editingIndex}
-            taskData={taskData}
-            setTaskData={setTaskData}
-            setEditingIndex={setEditingIndex}
-          />
-        )}
       </div>
       {/* Task Items */}
-      <ScrollContainer className="flex-1">
+      <ScrollContainer
+        className="flex-1 pb-20 sm:pb-8"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 24px)" }}
+        onScroll={handleTaskListScroll}
+      >
         {error && <div>Error: {error.message}</div>}
         <Masonry
           breakpointCols={breakpointColumns}
@@ -195,6 +206,43 @@ function TaskList({ listId, listName }) {
           ))}
         </Masonry>
       </ScrollContainer>
+
+      {openAlert && (
+        <AlertPopup
+          text="Bạn có chắc muốn xoá task này?"
+          onClose={() => {
+            setOpenAlert(false);
+            setDeletingIndex(-1);
+          }}
+          onConfirm={onConfirmDeleteTask}
+        />
+      )}
+
+      {open && (
+        <TaskPopup
+          key={editingIndex}
+          onClickDone={togglePopup}
+          onAddTask={handleAddTask}
+          onEditTask={handleSaveEdit}
+          onDeleteTask={handleDeleteTask}
+          listId={listId}
+          isOverviewMode={isOverview}
+          listOptions={listOptions}
+          index={editingIndex}
+          taskData={taskData}
+          setTaskData={setTaskData}
+          setEditingIndex={setEditingIndex}
+        />
+      )}
+
+      <button
+        type="button"
+        className="sm:hidden fixed right-4 bottom-[calc(env(safe-area-inset-bottom)+16px)] z-10 w-14 h-14 rounded-full bg-brand text-white text-2xl leading-none shadow-lg hover:bg-brand-hover active:scale-95 transition"
+        onClick={togglePopup}
+        aria-label="Add Task"
+      >
+        +
+      </button>
     </div>
   );
 }
